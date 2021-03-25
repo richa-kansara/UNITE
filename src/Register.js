@@ -1,58 +1,56 @@
-import { HistoryTwoTone } from '@material-ui/icons';
-import React, {useState} from 'react'
-import { useHistory, Link } from 'react-router-dom';
+import React, { useState } from 'react'
 import './Register.css';
-
+import { auth } from './firebase.js';
+import { Link, useHistory } from 'react-router-dom';
 function Register() {
-   
-
-    return (
-        <div className="register">
-             <img src="./images/logo.png" className="login_logo" />
-             <div className="register__container">
-                 <h1>Sign up</h1>
-                 <p>And unite with fun</p>
-                 <div className="hr3" />
-                 <form>
-                     <div className="row">
-                        <input
-                            className="register__name"
-                            type="name"
-                            placeholder="First Name"
-                            required
-                        />
-                        <input 
-                            
-                            className="regiater__name"
-                            type="name"
-                            placeholder="Last Name"
-                            required
-                        />
-                     </div>
-                     <center>
-                         <input 
+    const history = useHistory('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [birthday, setBirthday] = useState([]);
+    const [gender, setGender] = useState('');
     
-                            type="Email"
-                            placeholder="Email"
-                            required
-                         />
-                     </center>
-                     <center>
-                         <input 
-                          
-                            type="Password"
-                            placeholder="New Password"
-                            required
-                         />
-                     </center>
-                     <h5 className="register__date">Date of Birth</h5>
+    const register = (event) => {
+        event.preventDefault();
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((auth) => {
+                if (auth.user) {
+                    auth.user.updateProfile({
+                        displayName: firstName + "" + lastName
 
-                     <div className="row">
-                         <select className="register__date2">
-                             <option value="Day">Day</option>
+                    }).then((s) => {
+                        history.push("/")
+                    })
+                }     
+            })
+            .catch((e) => {
+                alert(e.message);
+        })
+    }
+    return (
+
+        <div className="logo">
+            <h1>UNITE</h1>        
+                <div className="register_container">
+                    <center><h1> First time! Register below</h1></center>
+                <form>
+                    <div className="row">
+                        <label>First Name: <input type="name" onChange={(e)=> setFirstName(e.target.value) } className="register_first" placeholder="text" /></label>
+                        <label>&nbsp;&nbsp; Last Name: <input type="name" onChange={(e)=> setLastName(e.target.value) }className="register_last" placeholder="text" /></label> 
+                    </div>
+                    <center>
+                        <label>&nbsp;&nbsp;&nbsp;Email ID: <input type="email" onChange={(e)=> setEmail(e.target.value) }className="register_email" placeholder="Eg: xyz@gmail.com" /></label>
+                        <label>&nbsp;&nbsp;&nbsp; Password: <input type="password" onChange={(e)=> setPassword(e.target.value) }className="register_password" placeholder="@abc1234" /></label>
+                    </center>
+                    
+                    <h5 className="register_dob">Date of Birth</h5>
+                    <div className="dob">
+                        <select className="register_date" onChange={(e)=> setBirthday([...birthday,e.target.value]) }>
+                             <option value="Date">Date</option>
                              <option value="1">1</option>
                              <option value="2">2</option>
-                             <option value="3">3 </option>
+                             <option value="3">3</option>
                              <option value="4">4</option>
                              <option value="5">5</option>
                              <option value="6">6</option>
@@ -81,94 +79,76 @@ function Register() {
                              <option value="29">29</option>
                              <option value="30">30</option>
                              <option value="31">31</option>
-                         </select>
-
-                       <select className="register__date3" >
-                            <option value="Day">Day</option>
-                             <option value="Jan">Jan</option>
-                             <option value="Feb">Feb</option>
-                             <option value="Mar">Mar</option>
-                             <option value="Apr">Apr</option>
-                             <option value="May">May</option>
-                             <option value="Jun">Jun</option>
-                             <option value="Jul">Jul</option>
-                             <option value="Aug">Aug</option>
-                             <option value="Sep">Sep</option>
-                             <option value="Oct">Oct</option>
-                             <option value="Nov">Nov</option>
-                             <option value="Dec">Dec</option>     
-                         </select>
-
-                         <select className="register__date3" >
-                             <option value="Year">Year</option>
-                             <option value="2003">2003</option>
-                             <option value="2002">2002</option>
-                             <option value="2001">2001</option>
-                             <option value="2000">2000</option>
-                             <option value="1999">1999</option>
-                             <option value="1998">1998</option>
-                             <option value="1997">1997</option>
-                             <option value="1996">1996</option>
-                             <option value="1995">1995</option>
-                             <option value="1994">1994</option>
-                             <option value="1993">1993</option>
-                             <option value="1992">1992</option>
-                             <option value="1991">1991</option>
-                             <option value="1990">1990</option>
-                             <option value="1989">1989</option>
-                             <option value="1988">1988</option>
-                             <option value="1987">1987</option>
-                             <option value="1986">1986</option>
-                             <option value="1985">1985</option>
-                             <option value="1984">1984</option>
-                             <option value="1983">1983</option>
-                             <option value="1982">1982</option>
-                             <option value="1981">1981</option>
-                         </select>
-                     </div>
-
-                     <h5 className="register__gender">Gender</h5>
-
-                     <div className="register_radiocontainer">
-                         <div className="wrapper">
-                             <label>Female</label>
-                             <input required type="radio" name="gender" value="female" />
-                         </div>
-
-                         <div className="wrapper">
-                             <label>Male</label>
-                             <input required  type="radio" name="gender" value="Male" />
-                         </div>
-
-                         <div className="wrapper">
-                             <label>Other</label>
-                             <input required  type="radio" name="gender" value="Other" />
-                         </div>
-                     </div>
-
-                     <p className="register__policy">
-                         By clickingg sign up, you are agree to our {" "}
+                            </select>
+                            <select className="register_month" onChange={(e)=> setBirthday([...birthday,e.target.value]) }>
+                                <option value="Jan">Jan</option>
+                                <option value="Feb">Feb</option>
+                                <option value="Mar">Mar</option>
+                                <option value="Apr">Apr</option>
+                                <option value="May">May</option>
+                                <option value="Jun">Jun</option>
+                                <option value="Jul">Jul</option>
+                                <option value="Aug">Aug</option>
+                                <option value="Sep">Sep</option>
+                                <option value="Oct">Oct</option>
+                                <option value="Nov">Nov</option>
+                                <option value="Dec">Dec</option>
+                            </select>
+                            <select className="register_year" onChange={(e)=> setBirthday([...birthday,e.target.value]) }>
+                                <option value="Year">Year</option>
+                                <option value="2003">2003</option>
+                                <option value="2002">2002</option>
+                                <option value="2001">2001</option>
+                                <option value="2000">2000</option>
+                                <option value="1999">1999</option>
+                                <option value="1998">1998</option>
+                                <option value="1997">1997</option>
+                                <option value="1996">1996</option>
+                                <option value="1995">1995</option>
+                                <option value="1994">1994</option>
+                                <option value="1993">1993</option>
+                                <option value="1992">1992</option>
+                                <option value="1991">1991</option>
+                                <option value="1990">1990</option>
+                                <option value="1989">1989</option>
+                                <option value="1988">1988</option>
+                                <option value="1987">1987</option>
+                                <option value="1986">1986</option>
+                                <option value="1985">1985</option>
+                                <option value="1984">1984</option>
+                                <option value="1983">1983</option>
+                                <option value="1982">1982</option>
+                                <option value="1981">1981</option>
+                            </select>
+                    </div>
+                    <h5 classname="register_gender">Gender</h5>
+                    <div className="gender">
+                        <label>Male</label>
+                        <input type="radio" required onChange={(e)=>setGender(e.target.value)} name="gender" value="Male" />
+                        <label>Female</label>
+                        <input type="radio" required onChange={(e)=>setGender(e.target.value)} name="gender" value="Female" />
+                        <label>Other</label>
+                        <input type="radio" required onChange={(e)=>setGender(e.target.value)} name="gender" value="Other" />
+                       
+                    </div>    
+                    <p className="register_policy">
+                         By clicking sign up, you agree to our {" "}
                          <span>Terms, Data policy</span> and <span>Cookie Policy</span>. You 
                          May receive SMS notification from us and can opt out at any time. 
-                     </p>
-
-                     <center>
-                         <button  type="submit" className="register__register" >
-                             Sign Up
-                         </button>
-                     </center>
-
-                     <center>
-                         <Link to="/Login">
-                             <p className="register__login">Already have an account?
-                             
-                             </p>
-                         </Link>
-                     </center>
-                 </form>
-             </div>
-        </div>
-    );
+                    </p>
+                    <center>
+                        <button onClick={register} type="submit" className="register_here" >Sign Up</button>
+                    </center>
+                    <center>
+                        <Link to="/Login">
+                            <p className="register_login">Already have an account?</p>
+                        </Link>
+                    </center>
+                </form>
+            </div>
+            </div>
+        
+    )
 }
 
 export default Register
